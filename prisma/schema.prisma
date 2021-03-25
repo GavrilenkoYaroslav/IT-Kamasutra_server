@@ -1,0 +1,44 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model users {
+  id                        Int        @id @default(autoincrement())
+  full_name                  String     @db.VarChar(50)
+  login                     String     @db.VarChar(50)
+  email                     String     @unique @db.VarChar(50)
+  password                  String     @db.VarChar(16)
+  looking_for_a_job            Boolean?
+  looking_for_a_job_description String?    @db.VarChar(255)
+  status                    String?    @db.VarChar(50)
+  follows                   Int[]
+  contacts                  contacts[]
+  photos                    photos[]
+}
+
+model contacts {
+  id        Int     @id @default(autoincrement())
+  github    String? @db.VarChar(255)
+  vk        String? @db.VarChar(255)
+  facebook  String? @db.VarChar(255)
+  instagram String? @db.VarChar(255)
+  twitter   String? @db.VarChar(255)
+  website   String? @db.VarChar(255)
+  youtube   String? @db.VarChar(255)
+  main_link  String? @db.VarChar(255)
+  user      users   @relation(fields: [user_id], references: [id])
+  user_id   Int
+}
+
+model photos {
+  id      Int     @id @default(autoincrement())
+  small   String? @db.VarChar(255)
+  large   String? @db.VarChar(255)
+  user    users   @relation(fields: [user_id], references: [id])
+  user_id Int
+}
